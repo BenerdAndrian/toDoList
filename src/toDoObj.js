@@ -42,6 +42,10 @@ export default class toDoObjects{
     set setNotes(newNote){
         this.notes=newNote;
     }
+    toDoCreating(toDoTitle,toDoDescription,toDoDueDate,toDoPriority,toDoNotes){
+      const toDo=new toDoObjects(toDoTitle,toDoDescription,toDoDueDate,toDoPriority,toDoNotes)
+      return toDo;
+    }
 }
 const todo1=new toDoObjects("bake a cake","go bake a cake","2025-02-25","high","decorate it soon")
 console.log(todo1.getDescription)

@@ -1,4 +1,4 @@
-import toDoObject from "./toDoObj"
+import toDoObject from "./toDoObj.js"
 class project{
     constructor(title,description,dueDate,priority,todoObj){
         this.title=title;
@@ -40,9 +40,20 @@ class project{
     }
     set setTodoObj(newObj){
         if(newObj.length>0){
-            this.todoObj=newObj
+            this.todoObj=newObj;
         }else{
             console.log("this Project has nothing to do")
         }
     }
+    projectCreating(projectTitle,projectDescription,projectDueDate,projectPriority,projectToDoList){
+     const theProject=new project(projectTitle,projectDescription,projectDueDate,projectPriority,projectToDoList);
+     return theProject;
+    }
 }
+const project1=new project("Learning webpack","","30-02-2025","high",[new toDoObject("Learning npm scripts","","22-01-2025","high","this is urgent to learn first"),
+                                                                      new toDoObject("Learning loader","","24-01-2025","high","this is urgent right after npm scripts"),
+                                                                      new toDoObject("Learning webpack-merge","","26-01-2025","high","this is urgent to learn after loader")
+                                                                    ])
+console.log(project1.getTodoObj[0].getTitle)
+console.log(project1.getTodoObj[1].getTitle)
+console.log(project1.getTodoObj[2].getDescription)
