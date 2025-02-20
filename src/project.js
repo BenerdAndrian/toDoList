@@ -1,59 +1,77 @@
-import toDoObject from "./toDoObj.js"
-class project{
-    constructor(title,description,dueDate,priority,todoObj){
+import { taskCreate} from "./tasks";
+
+class Project{
+    constructor(id,title,date,description){
+        this.id=id;
         this.title=title;
+        this.date=date;
         this.description=description;
-        this.dueDate=dueDate;
-        this.priority=priority;
-        this.todoObj=todoObj;
-    }
-    get getTitle(){
-        return this.title;
-    }
-    get getDescription(){
-        return this.description;
-    }
-    get getDueDate(){
-        return this.dueDate;
-    }
-    get getPriority(){
-        return this.priority;
-    }
-    get getTodoObj(){
-        return this.todoObj;
-    }
-    set setTitle(newTitle){
-        if(newTitle.length>0){
-            this.title=newTitle;
-        }else{
-            console.log("Project's title is blank")
-        }
-    }
-    set setDescription(newDescription){
-        this.description=newDescription;
-    }
-    set setDueDate(newDueDate){
-        this.dueDate=newDueDate;
-    }
-    set setPriority(newPriority){
-        this.priority=newPriority
-    }
-    set setTodoObj(newObj){
-        if(newObj.length>0){
-            this.todoObj=newObj;
-        }else{
-            console.log("this Project has nothing to do")
-        }
-    }
-    projectCreating(projectTitle,projectDescription,projectDueDate,projectPriority,projectToDoList){
-     const theProject=new project(projectTitle,projectDescription,projectDueDate,projectPriority,projectToDoList);
-     return theProject;
+        this.taskArray=[]
     }
 }
-const project1=new project("Learning webpack","","30-02-2025","high",[new toDoObject("Learning npm scripts","","22-01-2025","high","this is urgent to learn first"),
-                                                                      new toDoObject("Learning loader","","24-01-2025","high","this is urgent right after npm scripts"),
-                                                                      new toDoObject("Learning webpack-merge","","26-01-2025","high","this is urgent to learn after loader")
-                                                                    ])
-console.log(project1.getTodoObj[0].getTitle)
-console.log(project1.getTodoObj[1].getTitle)
-console.log(project1.getTodoObj[2].getDescription)
+//default project
+export const Projects=[
+    {
+        id:"01",
+        title:"Bake a Cake",
+        date:"02-02-2025",
+        description:"go baking a cake",
+        taskArray:[
+                 taskCreate("01","Buying A Cheese Cake","05-05-2025","high","nothing","not Complete"),
+                 taskCreate("01","Buying Sugar","05-06-2025","high","","not complete")
+        ]
+    },
+    {
+        id:"02",
+        title:"Learning Webpack",
+        date:"03-03-2025",
+        description:"webpack is a bundling tool,its nice to organize your code for the better",
+        taskArray:[
+            taskCreate("02","Learning Webpack basics","05-05-2025","high","","not Complete"),
+            taskCreate("02","Learning webpack-merge","05-06-2025","high","","not complete")
+        ]
+    }
+]
+function createProject(id,title,date,description){
+  const newProject=new Project(id,title,date,description)
+  Projects.push(newProject)
+  localStorage.setItem("projects",JSON.stringify(Projects))
+}
+function addTaskToProject(projectID,title,date,priority,notes,status){
+const newTask=taskCreate(projectID,title,date,priority,notes,status);
+Projects.forEach(project=>{
+    if(projectID===project.id){
+        project.taskArray.push(newTask)
+    }
+   
+})
+localStorage.setItem("projects",JSON.stringify(Projects))
+}
+function deleteProject(projectID){
+    Projects.forEach((project,index)=>{
+        if(project.id===projectID){
+            Projects.splice(index,1)
+        }
+    })
+    localStorage.setItem("projects",JSON.stringify(Projects))
+}
+function adjustProject(projectID,newtitle,newdate,newdescription){
+    projectAdjusted=false;
+    Projects.forEach(project=>{
+        if(project.id===projectID){
+            project.title=newtitle;
+            project.date=newdate;
+            project.description=newdescription;
+            projectAdjusted=true;
+        }
+      
+    })
+    if(projectAdjusted){
+        console.log("the project is adjusted")
+        localStorage.setItem("projects",JSON.stringify(Projects))
+    }else{
+        console.log("the project is not adjusted")
+    }
+}
+export {createProject,addTaskToProject,deleteProject,adjustProject}
+localStorage.setItem("projects",JSON.stringify(Projects))
